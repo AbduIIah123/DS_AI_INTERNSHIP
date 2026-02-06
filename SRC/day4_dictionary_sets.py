@@ -31,4 +31,4 @@ friend_a={"Python", "Cooking", "Hiking", "Movies"}
 friend_b={"Hiking", "Gaming", "Photography", "Python"}
 print("Interests they both share are:",friend_a&friend_b)
 print("Unique interests between the two are:",friend_a|friend_b)
-print("Unique interests of a are:",friend_a-friend_b)
+print("Unique interests of a are:",friend_a-friend_b)4
