@@ -14,7 +14,13 @@ print(f"Area: {area}, Perimeter: {perimeter}")
 
 #task 2
 
-import mathoperations
+import math_operations
 
+print("TASK 2")
+num_list=[10,22,21,11,44]
+base=int(input("Enter base:"))
+exp=int(input("Enter power:"))
+print("Power=",math_operations.pow(base, exp))
+print("Average=",math_operations.average(num_list))
 
     
