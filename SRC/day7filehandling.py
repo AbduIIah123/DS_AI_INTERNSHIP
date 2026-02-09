@@ -1,13 +1,11 @@
 #task 1
+with open("journal.txt","a") as file:
+    r=input("Your name and today's goal:")
+    file.write("\n"+r)
 
-name = input("Enter your name: ")
-goal = input("Enter your daily goal: ")
-
-with open("journal.txt", "a") as file:
-    file.write(f"Name: {name}, Daily Goal: {goal}\n")
-
-print("Entry saved!")
-
+with open("journal.txt","r") as file:
+    r=file.read()
+    print(r)
 #task 2
 
 import csv
