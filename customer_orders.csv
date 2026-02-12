@@ -1,0 +1,9 @@
+customer_ID,name,price,location,payment_mode,date
+101,Alice,$343,  Kalaburagi,Cash,
+102,Bob,$343,HumNabad,UPI,12-02-2025
+,Charlie,$65156,Hyderabad,Card,01-02-2024
+104,Keerti,$5156,Manglore,UPI,09-09-2026
+104,Keerti,$5156,Manglore,UPI,09-09-2026
+105,Aejaz,,Mysore,,08-07-2025
+,,$305,KalabuRagi,Cash,
+107,Abia,$36515,  KalaBuragi,,02-02-2023
