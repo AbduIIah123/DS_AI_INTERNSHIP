@@ -1,6 +1,6 @@
-# ================================
-# 1. Import Libraries
-# ================================
+
+#  Import Libraries
+
 import pandas as pd
 import numpy as np
 import pickle
@@ -13,14 +13,14 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
 
-# ================================
-# 2. Load Dataset
-# ================================
+
+#  Load Dataset
+
 df = pd.read_csv("performance.csv")
 
-# ================================
-# 3. Data Cleaning
-# ================================
+
+# Data Cleaning
+
 if "Age" in df.columns:
     df = df.drop("Age", axis=1)
 
@@ -38,9 +38,9 @@ df["Study_Hours"] = df["Study_Hours"].fillna(df["Study_Hours"].mode()[0])
 
 df = df.dropna(subset=["Student_ID"])
 
-# ================================
-# 4. Encoding
-# ================================
+
+#  Encoding
+
 df_encoded = pd.get_dummies(
     df,
     columns=["Gender", "Participation", "Internet_Access", "Family_Background"],
@@ -50,62 +50,62 @@ df_encoded = pd.get_dummies(
 le = LabelEncoder()
 df_encoded["Final_Result"] = le.fit_transform(df["Final_Result"])
 
-# ================================
-# 5. Features & Target
-# ================================
+
+#  Features & Target
+
 X = df_encoded.drop("Final_Result", axis=1)
 y = df_encoded["Final_Result"]
 
-# ================================
-# 6. Train-Test Split
-# ================================
+
+#  Train-Test Split
+
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-# ================================
-# 7. Scaling (for LR only)
-# ================================
+
+# Scaling 
+
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
-# ================================
-# 8. Models
-# ================================
+
+#  Models
+
 dummy = DummyClassifier(strategy="most_frequent")
 lr = LogisticRegression(max_iter=1000)
 dt = DecisionTreeClassifier(max_depth=5, random_state=42)
 rf = RandomForestClassifier(n_estimators=100, random_state=42)
 
-# ================================
-# 9. Cross Validation
-# ================================
+
+#Cross Validation
+
 print("\nCross Validation Scores:")
 print("Dummy:", cross_val_score(dummy, X_train, y_train, cv=5).mean())
 print("Logistic Regression:", cross_val_score(lr, X_train_scaled, y_train, cv=5).mean())
 print("Decision Tree:", cross_val_score(dt, X_train, y_train, cv=5).mean())
 print("Random Forest:", cross_val_score(rf, X_train, y_train, cv=5).mean())
 
-# ================================
-# 10. Train Models
-# ================================
+
+#  Train Models
+
 dummy.fit(X_train, y_train)
 lr.fit(X_train_scaled, y_train)
 dt.fit(X_train, y_train)
 rf.fit(X_train, y_train)
 
-# ================================
-# 11. Predictions
-# ================================
+
+#  Predictions
+
 y_dummy = dummy.predict(X_test)
 y_lr = lr.predict(X_test_scaled)
 y_dt = dt.predict(X_test)
 y_rf = rf.predict(X_test)
 
-# ================================
-# 12. Accuracy
-# ================================
+
+#  Accuracy
+
 dummy_acc = accuracy_score(y_test, y_dummy)
 lr_acc = accuracy_score(y_test, y_lr)
 dt_acc = accuracy_score(y_test, y_dt)
@@ -117,15 +117,14 @@ print("Logistic Regression:", lr_acc)
 print("Decision Tree:", dt_acc)
 print("Random Forest:", rf_acc)
 
-# ================================
-# 13. Evaluation (RF)
-# ================================
+
+#  Evaluation (RF)
+
 print("\nClassification Report (Random Forest):")
 print(classification_report(y_test, y_rf))
 
-# ================================
-# 14. Best Model Selection
-# ================================
+# Best Model Selection
+
 models = {
     "Dummy": dummy_acc,
     "Logistic Regression": lr_acc,
@@ -138,9 +137,8 @@ best_model = max(models, key=models.get)
 print("\nBest Model:", best_model)
 print("Best Accuracy:", models[best_model])
 
-# ================================
-# 15. SAVE MODEL (IMPORTANT ⭐)
-# ================================
+#  SAVE MODEL
+
 pickle.dump(rf, open("model.pkl", "wb"))
 pickle.dump(X.columns.tolist(), open("columns.pkl", "wb"))
 
