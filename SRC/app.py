@@ -1,27 +1,19 @@
-
-#  Import Libraries
-
+# Import Libraries
 import streamlit as st
 import pickle
 import pandas as pd
 import os
 
+# Load Model & Columns
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.join(BASE_DIR, "..")
 
-#  Load Model & Columns 
+model = pickle.load(open(os.path.join(ROOT_DIR, "model.pkl"), "rb"))
+columns = pickle.load(open(os.path.join(ROOT_DIR, "columns.pkl"), "rb"))
 
-BASE_DIR = os.path.dirname(__file__)
-
-model = pickle.load(open(os.path.join(BASE_DIR, "..", "model.pkl"), "rb"))
-columns = pickle.load(open(os.path.join(BASE_DIR, "..", "columns.pkl"), "rb"))
-
-
-# UI Titlest.title(" Student Performance Prediction")
-
+# UI Title
+st.title("🎓 Student Performance Prediction")
 st.write("Enter student details:")
-
-
-#  Inputs
-
 
 # Numerical Inputs
 assignment_score = st.number_input("Assignment Score", 0.0, 100.0)
@@ -33,44 +25,31 @@ study_hours = st.number_input("Study Hours", 0.0, 24.0)
 # Categorical Inputs
 gender = st.selectbox("Gender", ["Male", "Female", "Unknown"])
 participation = st.selectbox("Participation", ["Low", "Medium", "High"])
-internet = st.selectbox("Internet Access", ["Yes", "No", "Unknown"])
-family = st.selectbox("Family Background", ["Poor", "Average", "Good"])
+internet = st.selectbox("Internet Access", ["Yes", "No"])
+family = st.selectbox("Family Background", ["Low", "Medium", "High"])
 
-
-# 5. Prediction Logic
-
+# Prediction Logic
 if st.button("Predict"):
 
-    input_data = pd.DataFrame([{
+    # Start with all expected columns set to 0
+    input_encoded = pd.DataFrame([{col: 0 for col in columns}])
+
+    # Fill numerical columns
+    num_map = {
         "Assignment_Score": assignment_score,
         "Internal_Marks": internal_marks,
         "Previous_GPA": previous_gpa,
         "Attendance": attendance,
         "Study_Hours": study_hours,
+    }
+    for col, val in num_map.items():
+        if col in input_encoded.columns:
+            input_encoded[col] = val
+
+    # Fill one-hot encoded categorical columns
+    cat_map = {
         "Gender": gender,
         "Participation": participation,
         "Internet_Access": internet,
-        "Family_Background": family
-    }])
-
-    # Encode input
-    input_encoded = pd.get_dummies(input_data)
-
-    # Match training columns
-    for col in columns:
-        if col not in input_encoded:
-            input_encoded[col] = 0
-
-    input_encoded = input_encoded[columns]
-
-    # Predict
-    prediction = model.predict(input_encoded)[0]
-
-    # Output mapping
-    result_map = {
-        0: "At Risk",
-        1: "Average",
-        2: "High Performer"
+        "Family_Background": family,
     }
-
-    st.success(f"Prediction: {result_map.get(prediction)}")
