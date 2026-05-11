@@ -1,29 +1,27 @@
-# ================================
-# 1. Import Libraries
-# ================================
+
+#  Import Libraries
+
 import streamlit as st
 import pickle
 import pandas as pd
 import os
 
-# ================================
-# 2. Load Model & Columns (FIXED PATH ⭐)
-# ================================
+
+#  Load Model & Columns 
+
 BASE_DIR = os.path.dirname(__file__)
 
 model = pickle.load(open(os.path.join(BASE_DIR, "..", "model.pkl"), "rb"))
 columns = pickle.load(open(os.path.join(BASE_DIR, "..", "columns.pkl"), "rb"))
 
-# ================================
-# 3. UI Title
-# ================================
-st.title("🎓 Student Performance Prediction")
+
+# UI Titlest.title(" Student Performance Prediction")
 
 st.write("Enter student details:")
 
-# ================================
-# 4. Inputs
-# ================================
+
+#  Inputs
+
 
 # Numerical Inputs
 assignment_score = st.number_input("Assignment Score", 0.0, 100.0)
@@ -38,9 +36,9 @@ participation = st.selectbox("Participation", ["Low", "Medium", "High"])
 internet = st.selectbox("Internet Access", ["Yes", "No", "Unknown"])
 family = st.selectbox("Family Background", ["Poor", "Average", "Good"])
 
-# ================================
+
 # 5. Prediction Logic
-# ================================
+
 if st.button("Predict"):
 
     input_data = pd.DataFrame([{
